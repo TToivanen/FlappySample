@@ -241,6 +241,8 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         FixtureDef fixDef = PhysicsFactory.createFixtureDef(1.0f, 0.15f, 1.0f);
 
+        // Defining a rectangle graphic
+        // position coordinate x, position coordinate y, dimension x, dimension y, vertexBufferObjectManager
         Rectangle ground = new Rectangle(0, 0, dispWidth*9999, 400,
                 this.mEngine.getVertexBufferObjectManager());
         ground.setColor(getResources().getColor(android.R.color.holo_blue_dark));
