@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="physicsbox2d_so_files">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FlappySample/libs/physicsbox2d_so_files.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

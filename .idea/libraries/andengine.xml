@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="andengine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FlappySample/libs/andengine.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
