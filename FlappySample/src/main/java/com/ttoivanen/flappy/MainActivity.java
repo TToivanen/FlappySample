@@ -245,14 +245,14 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         // position coordinate x, position coordinate y, dimension x, dimension y, vertexBufferObjectManager
         Rectangle ground = new Rectangle(0, 0, dispWidth*9999, 400,
                 this.mEngine.getVertexBufferObjectManager());
-        ground.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+        ground.setColor(0, 0, 1);
         body1 = PhysicsFactory.createBoxBody(physicsWorld, ground, BodyDef.BodyType.StaticBody, fixDef);
         body1.setUserData("ground");
         this.scn.attachChild(ground);
 
         Rectangle top = new Rectangle(0, dispHeight+200, dispWidth*9999, 400,
                 this.mEngine.getVertexBufferObjectManager());
-        top.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+        top.setColor(0, 0, 1);
         body2 = PhysicsFactory.createBoxBody(physicsWorld, top, BodyDef.BodyType.StaticBody, fixDef);
         body2.setUserData("top");
         this.scn.attachChild(top);
@@ -261,7 +261,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         player = new Rectangle(dispWidth/2, dispHeight/2, dispHeight/14, dispHeight/14,
                 this.mEngine.getVertexBufferObjectManager());
-        player.setColor(getResources().getColor(android.R.color.holo_green_dark));
+        player.setColor(0, 1, 0);
         body3 = PhysicsFactory.createBoxBody(physicsWorld, player, BodyDef.BodyType.DynamicBody, fixDef);
         body3.setUserData("player");
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(player, body3, true, true));
@@ -315,14 +315,14 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
             ob1 = new Rectangle(dispWidth + width*obstacleMultiplier, (dispHeight/12)+(obstacleHeight/2) + movementIncrement,
                     obstacleWidth, obstacleHeight, this.mEngine.getVertexBufferObjectManager());
-            ob1.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+            ob1.setColor(0, 0, 1);
             body1 = PhysicsFactory.createBoxBody(physicsWorld, ob1, BodyDef.BodyType.StaticBody, fixDef);
             body1.setUserData("ob1");
             this.scn.attachChild(ob1);
 
             ob2 = new Rectangle(dispWidth + width*obstacleMultiplier, (ob1.getY())+obstacleHeight+height, obstacleWidth,
                     obstacleHeight, this.mEngine.getVertexBufferObjectManager());
-            ob2.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+            ob2.setColor(0, 0, 1);
             body2 = PhysicsFactory.createBoxBody(physicsWorld, ob2, BodyDef.BodyType.StaticBody, fixDef);
             body2.setUserData("ob2");
             this.scn.attachChild(ob2);
