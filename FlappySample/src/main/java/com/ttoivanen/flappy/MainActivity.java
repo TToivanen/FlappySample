@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -36,14 +37,21 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import java.io.IOException;
 import java.util.Random;
+
+import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
 // TODO: Dispose of old obstacles
 // TODO: Tweak flying mechanics & difficulty
@@ -72,9 +80,12 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
     Body body1;
     Body body2;
     Body body3;
-    Rectangle player;
+    Sprite birdSprite;
     Rectangle ob1;
     Rectangle ob2;
+
+    private BitmapTextureAtlas bird;
+    private ITextureRegion birdTextureRegion;
 
     private static final String DEBUG_TAG = "Debug that shit"; // Let the debugging commence :-D
 
@@ -183,7 +194,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
             if (!gameOver) {
 
                 // Give the player model a nice boost upwards
-                Vector2 impulse = new Vector2(0f, 200.0f);
+                Vector2 impulse = new Vector2(0f, 130.0f);
                 Vector2 point = new Vector2(body3.getPosition());
 
                 body3.applyLinearImpulse(impulse, point);
@@ -191,7 +202,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
             }
 
             // Check on every tap whether new obstacles need to be rendered or not
-            if ((int) (((player.getX() - 750)/300) + 1) >= (3 + (obstacleSetsMade - 1)*5)) {
+            if ((int) (((birdSprite.getX() - 750)/300) + 1) >= (3 + (obstacleSetsMade - 1)*5)) {
                 createObstacles();
             }
         }
@@ -213,6 +224,12 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         // Load top score from settings storage
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         highScore = prefs.getInt("storedHighScore", 0);
+
+        // Load graphics
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("graphics/");
+        bird = new BitmapTextureAtlas(getTextureManager(), 256, 256, TextureOptions.DEFAULT);
+        birdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bird, this, "birdy.png", 0, 0);
+        bird.load();
 
     }
 
@@ -239,6 +256,10 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         final Body body1;
         final Body body2;
 
+        birdSprite = new Sprite(256, 256, birdTextureRegion, mEngine.getVertexBufferObjectManager());
+        birdSprite.setSize(dispHeight/10, dispHeight/10);
+        birdSprite.setPosition(dispWidth/2, dispHeight/2);
+
         FixtureDef fixDef = PhysicsFactory.createFixtureDef(1.0f, 0.15f, 1.0f);
 
         // Defining a rectangle graphic
@@ -258,17 +279,89 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         this.scn.attachChild(top);
 
         // ... and the dynamic player model.
+        final float width = birdSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final float height = birdSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.x = birdSprite.getX() / PIXEL_TO_METER_RATIO_DEFAULT;
+        bodyDef.position.y = birdSprite.getY() / PIXEL_TO_METER_RATIO_DEFAULT;
+        body3 = physicsWorld.createBody(bodyDef);
+        final PolygonShape polyShape = new PolygonShape();
 
-        player = new Rectangle(dispWidth/2, dispHeight/2, dispHeight/14, dispHeight/14,
-                this.mEngine.getVertexBufferObjectManager());
-        player.setColor(0, 1, 0);
-        body3 = PhysicsFactory.createBoxBody(physicsWorld, player, BodyDef.BodyType.DynamicBody, fixDef);
+        final Vector2[] vertices1 = {
+                new Vector2(-0.14138f*width, +0.01519f*height),
+                new Vector2(-0.05729f*width, +0.01790f*height),
+                new Vector2(+0.12988f*width, +0.10200f*height),
+                new Vector2(-0.27702f*width, +0.29460f*height),
+                new Vector2(-0.21463f*width, +0.14811f*height)
+        };
+
+        polyShape.set(vertices1);
+        fixDef.shape = polyShape;
+        body3.createFixture(fixDef);
+        polyShape.dispose();
+
+        final Vector2[] vertices2 = {
+                new Vector2(+0.12988f*width, +0.09657f*height),
+                new Vector2(+0.10004f*width, +0.19151f*height),
+                new Vector2(-0.13053f*width, +0.32715f*height),
+                new Vector2(-0.10069f*width, +0.19694f*height)
+        };
+
+        final PolygonShape polyShape2 = new PolygonShape();
+        polyShape2.set(vertices2);
+        fixDef.shape = polyShape2;
+        body3.createFixture(fixDef);
+        polyShape2.dispose();
+
+        final Vector2[] vertices3 = {
+                new Vector2(-0.12782f*width, -0.35373f*height),
+                new Vector2(+0.26280f*width, -0.10959f*height),
+                new Vector2(+0.37945f*width, +0.11013f*height),
+                new Vector2(+0.37674f*width, +0.18609f*height),
+                new Vector2(+0.31977f*width, +0.27018f*height),
+                new Vector2(+0.20041f*width, +0.28103f*height),
+                new Vector2(+0.09462f*width, +0.19965f*height)
+        };
+
+        final PolygonShape polyShape3 = new PolygonShape();
+        polyShape3.set(vertices3);
+        fixDef.shape = polyShape3;
+        body3.createFixture(fixDef);
+        polyShape3.dispose();
+
+        final Vector2[] vertices4 = {
+                new Vector2(-0.29872f*width, -0.14757f*height),
+                new Vector2(-0.05953f*width, -0.24624f*height),
+                new Vector2(+0.00510f*width, +0.06131f*height),
+                new Vector2(-0.48318f*width, +0.01519f*height)
+        };
+
+        final PolygonShape polyShape4 = new PolygonShape();
+        polyShape4.set(vertices4);
+        fixDef.shape = polyShape4;
+        body3.createFixture(fixDef);
+        polyShape4.dispose();
+
+        final Vector2[] vertices5 = {
+                new Vector2(+0.32520f*width, +0.07758f*height),
+                new Vector2(+0.45269f*width, +0.07216f*height),
+                new Vector2(+0.48524f*width, +0.18338f*height),
+                new Vector2(+0.37402f*width, +0.18609f*height)
+        };
+
+        final PolygonShape polyShape5 = new PolygonShape();
+        polyShape5.set(vertices5);
+        fixDef.shape = polyShape5;
+        body3.createFixture(fixDef);
+        polyShape5.dispose();
+
         body3.setUserData("player");
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(player, body3, true, true));
-        this.scn.attachChild(player);
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(birdSprite, body3, true, true));
+        this.scn.attachChild(birdSprite);
 
         // We want the camera to follow player
-        cam.setChaseEntity(player);
+        cam.setChaseEntity(birdSprite);
 
         // We can use physics debug if we want like so:
         /*DebugRenderer debug = new DebugRenderer(physicsWorld, getVertexBufferObjectManager());
@@ -335,11 +428,9 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
     }
 
     private ContactListener createContactListener() {
-        return new ContactListener()
-        {
+        return new ContactListener() {
             @Override
-            public void beginContact(Contact contact)
-            {
+            public void beginContact(Contact contact) {
                 final Fixture x1 = contact.getFixtureA();
                 final Fixture x2 = contact.getFixtureB();
 
@@ -365,9 +456,9 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
                 if (x2.getBody().getUserData().equals("ob2")&&x1.getBody().getUserData().equals("player")) {
                     if (!gameOver) {
-                    sound.play();
-                    gameOver = true;
-                    scoreHandler();
+                        sound.play();
+                        gameOver = true;
+                        scoreHandler();
                     }
                 }
             }
@@ -455,7 +546,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
     public void scoreHandler() {
         if (score == 0) {
 
-            score = (int) (((player.getX() - 750)/300) + 1); // Get the score using this strange enough method
+            score = (int) (((birdSprite.getX() - 750)/300) + 1); // Get the score using this strange enough method
             Log.d(DEBUG_TAG, "Score: " + score);
 
             // Write score to settings storage if it's higher than the current top score
