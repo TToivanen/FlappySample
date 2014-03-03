@@ -401,7 +401,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
             // Display score
             Context context = getApplicationContext();
-            CharSequence text = "Score: " + score + " " + "High score: " + highScore;
+            CharSequence text = "Score: " + score + "\n" + "High score: " + highScore;
             int duration = Toast.LENGTH_LONG;
 
             assert context != null;
