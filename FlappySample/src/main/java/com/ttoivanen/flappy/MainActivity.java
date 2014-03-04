@@ -498,8 +498,8 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("This is a sample vidya game. Tap on the screen to fly.")
-                    .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.intro_message)
+                    .setNeutralButton(R.string.intro_okay, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // Want to start game
                             // Activate gravity and set velocity for player
@@ -517,13 +517,13 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("Try again?")
-                    .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.reload_message)
+                    .setNegativeButton(R.string.reload_nah, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             finish(); // Exit activity
                         }
                     })
-                    .setPositiveButton("Why the fuck not", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.reload_yep, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             finish(); // Exit
                             startActivity(getIntent()); // and relaunch activity

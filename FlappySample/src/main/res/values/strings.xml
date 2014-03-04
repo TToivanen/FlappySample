@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">FlappySample</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
+    <string name="intro_message">This is a sample vidya game. Tap on the screen to fly.</string>
+    <string name="intro_okay">Got it</string>
+    <string name="reload_message">Try again?</string>
+    <string name="reload_nah">Nope</string>
+    <string name="reload_yep">Sure</string>
 </resources>
