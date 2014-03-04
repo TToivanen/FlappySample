@@ -243,8 +243,6 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         physicsWorld.setContactListener(createContactListener());
 
-        Log.d(DEBUG_TAG, "Physics initialized");
-
         createBodies();
     }
 
@@ -423,7 +421,6 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         }
 
         obstacleSetsMade++; // 5 obstacles were generated
-        Log.d(DEBUG_TAG, "Total number of obstacles so far: " + obstacleSetsMade*5);
     }
 
     private ContactListener createContactListener() {
@@ -546,7 +543,6 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         if (score == 0) {
 
             score = (int) (((birdSprite.getX() - 750)/300) + 1); // Get the score using this strange enough method
-            Log.d(DEBUG_TAG, "Score: " + score);
 
             // Write score to settings storage if it's higher than the current top score
             if (score > highScore) {
