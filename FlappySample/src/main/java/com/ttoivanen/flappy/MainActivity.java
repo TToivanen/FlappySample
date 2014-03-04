@@ -187,8 +187,6 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         if (pSceneTouchEvent.isActionDown()) {
 
-            Log.d(DEBUG_TAG, "Touch registered");
-
             // Check whether the game has ended or not
             if (!gameOver) {
 
@@ -261,14 +259,14 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         // Defining a rectangle graphic
         // position coordinate x, position coordinate y, dimension x, dimension y, vertexBufferObjectManager
-        Rectangle ground = new Rectangle(0, 0, dispWidth*9999, 400,
+        Rectangle ground = new Rectangle(0, -dispHeight/3, dispWidth*9999, dispHeight,
                 this.mEngine.getVertexBufferObjectManager());
         ground.setColor(0, 0, 1);
         body1 = PhysicsFactory.createBoxBody(physicsWorld, ground, BodyDef.BodyType.StaticBody, fixDef);
         body1.setUserData("ground");
         this.scn.attachChild(ground);
 
-        Rectangle top = new Rectangle(0, dispHeight+200, dispWidth*9999, 400,
+        Rectangle top = new Rectangle(0, dispHeight+(dispHeight/3), dispWidth*9999, dispHeight,
                 this.mEngine.getVertexBufferObjectManager());
         top.setColor(0, 0, 1);
         body2 = PhysicsFactory.createBoxBody(physicsWorld, top, BodyDef.BodyType.StaticBody, fixDef);
@@ -368,15 +366,15 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
     }
 
-    private void createObstacles(){
+    private void createObstacles() {
 
         // Need something to make this game infinitely irritating.
 
-        int obstacleHeight = 500;
-        int obstacleWidth = 130;
+        int obstacleHeight = dispHeight/3;
+        int obstacleWidth = dispWidth/8;
         int obstacleCount = 0;
-        int width = 300; // X-axis space between obstacles
-        int height = 500 ; // Y-axis space between obstacles
+        int width = dispWidth/3; // X-axis space between obstacles
+        int height = dispHeight/5 ; // Y-axis space between obstacles
 
         FixtureDef fixDef = PhysicsFactory.createFixtureDef(1.0f, 0.15f, 1.0f);
 
@@ -410,8 +408,8 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
             body1.setUserData("ob1");
             this.scn.attachChild(ob1);
 
-            ob2 = new Rectangle(dispWidth + width*obstacleMultiplier, (ob1.getY())+obstacleHeight+height, obstacleWidth,
-                    obstacleHeight, this.mEngine.getVertexBufferObjectManager());
+            ob2 = new Rectangle(dispWidth + width*obstacleMultiplier, ((ob1.getY())+obstacleHeight+height)+500, obstacleWidth,
+                    obstacleHeight+1000, this.mEngine.getVertexBufferObjectManager());
             ob2.setColor(0, 0, 1);
             body2 = PhysicsFactory.createBoxBody(physicsWorld, ob2, BodyDef.BodyType.StaticBody, fixDef);
             body2.setUserData("ob2");
