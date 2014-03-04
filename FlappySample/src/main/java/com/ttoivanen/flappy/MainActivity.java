@@ -84,7 +84,6 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
     Rectangle ob1;
     Rectangle ob2;
 
-    private BitmapTextureAtlas bird;
     private ITextureRegion birdTextureRegion;
 
     private static final String DEBUG_TAG = "Debug that shit"; // Let the debugging commence :-D
@@ -227,7 +226,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         // Load graphics
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("graphics/");
-        bird = new BitmapTextureAtlas(getTextureManager(), 256, 256, TextureOptions.DEFAULT);
+        BitmapTextureAtlas bird = new BitmapTextureAtlas(getTextureManager(), 256, 256, TextureOptions.DEFAULT);
         birdTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bird, this, "birdy.png", 0, 0);
         bird.load();
 
