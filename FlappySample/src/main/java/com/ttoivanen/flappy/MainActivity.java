@@ -57,6 +57,7 @@ import static org.andengine.extension.physics.box2d.util.constants.PhysicsConsta
 // TODO: Tweak flying mechanics & difficulty
 // TODO: Advanced graphics and audio
 // TODO: Splash screen
+// TODO: Read polygons from XML/json
 
 public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouchListener {
 
@@ -273,81 +274,8 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         // ... and the dynamic player model.
         final float width = birdSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = birdSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
-        final BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.x = birdSprite.getX() / PIXEL_TO_METER_RATIO_DEFAULT;
-        bodyDef.position.y = birdSprite.getY() / PIXEL_TO_METER_RATIO_DEFAULT;
-        body3 = physicsWorld.createBody(bodyDef);
-        final PolygonShape polyShape = new PolygonShape();
 
-        final Vector2[] vertices1 = {
-                new Vector2(-0.14138f*width, +0.01519f*height),
-                new Vector2(-0.05729f*width, +0.01790f*height),
-                new Vector2(+0.12988f*width, +0.10200f*height),
-                new Vector2(-0.27702f*width, +0.29460f*height),
-                new Vector2(-0.21463f*width, +0.14811f*height)
-        };
-
-        polyShape.set(vertices1);
-        fixDef.shape = polyShape;
-        body3.createFixture(fixDef);
-        polyShape.dispose();
-
-        final Vector2[] vertices2 = {
-                new Vector2(+0.12988f*width, +0.09657f*height),
-                new Vector2(+0.10004f*width, +0.19151f*height),
-                new Vector2(-0.13053f*width, +0.32715f*height),
-                new Vector2(-0.10069f*width, +0.19694f*height)
-        };
-
-        final PolygonShape polyShape2 = new PolygonShape();
-        polyShape2.set(vertices2);
-        fixDef.shape = polyShape2;
-        body3.createFixture(fixDef);
-        polyShape2.dispose();
-
-        final Vector2[] vertices3 = {
-                new Vector2(-0.12782f*width, -0.35373f*height),
-                new Vector2(+0.26280f*width, -0.10959f*height),
-                new Vector2(+0.37945f*width, +0.11013f*height),
-                new Vector2(+0.37674f*width, +0.18609f*height),
-                new Vector2(+0.31977f*width, +0.27018f*height),
-                new Vector2(+0.20041f*width, +0.28103f*height),
-                new Vector2(+0.09462f*width, +0.19965f*height)
-        };
-
-        final PolygonShape polyShape3 = new PolygonShape();
-        polyShape3.set(vertices3);
-        fixDef.shape = polyShape3;
-        body3.createFixture(fixDef);
-        polyShape3.dispose();
-
-        final Vector2[] vertices4 = {
-                new Vector2(-0.29872f*width, -0.14757f*height),
-                new Vector2(-0.05953f*width, -0.24624f*height),
-                new Vector2(+0.00510f*width, +0.06131f*height),
-                new Vector2(-0.48318f*width, +0.01519f*height)
-        };
-
-        final PolygonShape polyShape4 = new PolygonShape();
-        polyShape4.set(vertices4);
-        fixDef.shape = polyShape4;
-        body3.createFixture(fixDef);
-        polyShape4.dispose();
-
-        final Vector2[] vertices5 = {
-                new Vector2(+0.32520f*width, +0.07758f*height),
-                new Vector2(+0.45269f*width, +0.07216f*height),
-                new Vector2(+0.48524f*width, +0.18338f*height),
-                new Vector2(+0.37402f*width, +0.18609f*height)
-        };
-
-        final PolygonShape polyShape5 = new PolygonShape();
-        polyShape5.set(vertices5);
-        fixDef.shape = polyShape5;
-        body3.createFixture(fixDef);
-        polyShape5.dispose();
-
+        body3 = polygonBody("bird", width, height, fixDef, birdSprite);
         body3.setUserData("player");
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(birdSprite, body3, true, true));
         this.scn.attachChild(birdSprite);
@@ -361,6 +289,90 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
         createObstacles();
 
+    }
+
+    Body polygonBody(String id, float width, float height, FixtureDef fixDef, Sprite sprite) {
+
+        Body body;
+
+        if (id.equals("bird")) {
+            final BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.x = sprite.getX() / PIXEL_TO_METER_RATIO_DEFAULT;
+            bodyDef.position.y = sprite.getY() / PIXEL_TO_METER_RATIO_DEFAULT;
+            body = physicsWorld.createBody(bodyDef);
+            final PolygonShape polyShape = new PolygonShape();
+
+            final Vector2[] vertices1 = {
+                    new Vector2(-0.14138f*width, +0.01519f*height),
+                    new Vector2(-0.05729f*width, +0.01790f*height),
+                    new Vector2(+0.12988f*width, +0.10200f*height),
+                    new Vector2(-0.27702f*width, +0.29460f*height),
+                    new Vector2(-0.21463f*width, +0.14811f*height)
+            };
+
+            polyShape.set(vertices1);
+            fixDef.shape = polyShape;
+            body.createFixture(fixDef);
+            polyShape.dispose();
+
+            final Vector2[] vertices2 = {
+                    new Vector2(+0.12988f*width, +0.09657f*height),
+                    new Vector2(+0.10004f*width, +0.19151f*height),
+                    new Vector2(-0.13053f*width, +0.32715f*height),
+                    new Vector2(-0.10069f*width, +0.19694f*height)
+            };
+
+            final PolygonShape polyShape2 = new PolygonShape();
+            polyShape2.set(vertices2);
+            fixDef.shape = polyShape2;
+            body.createFixture(fixDef);
+            polyShape2.dispose();
+
+            final Vector2[] vertices3 = {
+                    new Vector2(-0.12782f*width, -0.35373f*height),
+                    new Vector2(+0.26280f*width, -0.10959f*height),
+                    new Vector2(+0.37945f*width, +0.11013f*height),
+                    new Vector2(+0.37674f*width, +0.18609f*height),
+                    new Vector2(+0.31977f*width, +0.27018f*height),
+                    new Vector2(+0.20041f*width, +0.28103f*height),
+                    new Vector2(+0.09462f*width, +0.19965f*height)
+            };
+
+            final PolygonShape polyShape3 = new PolygonShape();
+            polyShape3.set(vertices3);
+            fixDef.shape = polyShape3;
+            body.createFixture(fixDef);
+            polyShape3.dispose();
+
+            final Vector2[] vertices4 = {
+                    new Vector2(-0.29872f*width, -0.14757f*height),
+                    new Vector2(-0.05953f*width, -0.24624f*height),
+                    new Vector2(+0.00510f*width, +0.06131f*height),
+                    new Vector2(-0.48318f*width, +0.01519f*height)
+            };
+
+            final PolygonShape polyShape4 = new PolygonShape();
+            polyShape4.set(vertices4);
+            fixDef.shape = polyShape4;
+            body.createFixture(fixDef);
+            polyShape4.dispose();
+
+            final Vector2[] vertices5 = {
+                    new Vector2(+0.32520f*width, +0.07758f*height),
+                    new Vector2(+0.45269f*width, +0.07216f*height),
+                    new Vector2(+0.48524f*width, +0.18338f*height),
+                    new Vector2(+0.37402f*width, +0.18609f*height)
+            };
+
+            final PolygonShape polyShape5 = new PolygonShape();
+            polyShape5.set(vertices5);
+            fixDef.shape = polyShape5;
+            body.createFixture(fixDef);
+            polyShape5.dispose();
+
+        } else body = null;
+        return body;
     }
 
     private void createObstacles() {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">FlappySample</string>
     <string name="intro_message">This is a sample vidya game. Tap on the screen to fly.</string>
     <string name="intro_okay">Got it</string>
