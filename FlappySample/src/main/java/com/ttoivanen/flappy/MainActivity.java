@@ -191,10 +191,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
             if (!gameOver) {
 
                 // Give the player model a nice boost upwards
-                Vector2 impulse = new Vector2(0f, 130.0f);
-                Vector2 point = new Vector2(body3.getPosition());
-
-                body3.applyLinearImpulse(impulse, point);
+                body3.setLinearVelocity(body3.getLinearVelocity().x, 15.0f);
                 sound.play();
             }
 
@@ -373,7 +370,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
         int obstacleHeight = dispHeight/3;
         int obstacleWidth = dispWidth/8;
         int obstacleCount = 0;
-        int width = dispWidth/3; // X-axis space between obstacles
+        int width = ((int) birdSprite.getWidth()*2); // X-axis space between obstacles
         int height = dispHeight/5 ; // Y-axis space between obstacles
 
         FixtureDef fixDef = PhysicsFactory.createFixtureDef(1.0f, 0.15f, 1.0f);
@@ -389,7 +386,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
 
             // How much the path changes
             int movementIncrement = 0;
-            if (obstacleCount != 0) movementIncrement = rn.nextInt(15);
+            if (obstacleCount != 0) movementIncrement = rn.nextInt(dispHeight/120);
             if (path == 0) {
                 movementIncrement = -(movementIncrement)*20;
             } else movementIncrement = movementIncrement*20;
@@ -507,7 +504,7 @@ public class MainActivity extends SimpleBaseGameActivity implements IOnSceneTouc
                             // Want to start game
                             // Activate gravity and set velocity for player
                             body3.setLinearVelocity(6.0f, 0f);
-                            gravity = new Vector2(0, -15f);
+                            gravity = new Vector2(0, -35f);
                             physicsWorld.setGravity(gravity);
                         }
                     });
